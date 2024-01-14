@@ -1,6 +1,8 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -28,6 +30,9 @@ public class HomePage {
     By dateOfBirthTextBoxId = By.id("dateOfBirth");
     By movieCard = By.className("movie-card");
     By adminDashboardId = By.id("admin-dashboard");
+    By addToWatchlistButtonId = By.id("add-to-watchlist-button");
+    By watchlistId = By.id("title_watchlist");
+    By addedToWatchlistModalId = By.id("added-to-watchlist-modal");
 
     public void logoutUser(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
@@ -71,5 +76,24 @@ public class HomePage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(adminDashboardId));
         WebElement adminDashboard = driver.findElement(adminDashboardId);
         adminDashboard.click();
+    }
+
+    public void goToWatchlistPage(){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(watchlistId));
+        WebElement watchlistTitle = driver.findElement(watchlistId);
+        watchlistTitle.click();
+    }
+
+    public void addMovieToWatchlist(int movieIndex){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(movieCard));
+        List<WebElement> movies = driver.findElements(movieCard);
+
+        Actions actions = new Actions(driver);
+        actions.moveToElement(movies.get(movieIndex)).perform();
+
+        WebElement addToWatchlistButton = driver.findElement(addToWatchlistButtonId);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToWatchlistButton);
+
+        driver.navigate().refresh();
     }
 }

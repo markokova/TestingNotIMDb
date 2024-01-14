@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -24,7 +25,16 @@ public class AddToWatchlistTest {
 
     @Test
     public void addToWatchlistTest(){
-        WebElement addToWatchlistButton = driver.findElement(By.id("add-to-watchlist-button"));
+        WatchlistPage watchlistPage = new WatchlistPage(driver);
+
+        homePage.goToWatchlistPage();
+        int numOfMoviesBeforeAdding = watchlistPage.countMoviesInWatchlist();
+        watchlistPage.goToHomePage();
+        homePage.addMovieToWatchlist(0);
+        homePage.goToWatchlistPage();
+        int numOfMoviesAfterAdding = watchlistPage.countMoviesInWatchlist();
+
+        Assert.assertNotEquals(numOfMoviesBeforeAdding, numOfMoviesAfterAdding);
     }
 
     @AfterMethod
