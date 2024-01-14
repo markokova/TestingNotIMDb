@@ -10,10 +10,12 @@ import java.util.List;
 public class HomePage {
 
     public WebDriver driver;
+    public WebDriverWait wait;
     public String loginURL = "http://localhost:3000/login";
 
     public HomePage(WebDriver driver){
         this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 
     By userButtonId = By.id("btn-user-dropdown");
@@ -25,6 +27,7 @@ public class HomePage {
     By passwordTextBoxId = By.id("password");
     By dateOfBirthTextBoxId = By.id("dateOfBirth");
     By movieCard = By.className("movie-card");
+    By adminDashboardId = By.id("admin-dashboard");
 
     public void logoutUser(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
@@ -35,7 +38,6 @@ public class HomePage {
     }
 
     public void registerUser(String firstName, String lastName, String email, String password, String dateOfBirth) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 
         WebElement registerButton = wait.until(ExpectedConditions.elementToBeClickable(registerButtonId));
         registerButton.click();
@@ -60,9 +62,14 @@ public class HomePage {
     }
 
     public void goToMovieDetails(int movieIndex){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(movieCard));
         List<WebElement> movies = driver.findElements(movieCard);
         movies.get(movieIndex).click();
+    }
+
+    public void goToAdminDashboard(){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(adminDashboardId));
+        WebElement adminDashboard = driver.findElement(adminDashboardId);
+        adminDashboard.click();
     }
 }
